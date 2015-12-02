@@ -1,0 +1,28 @@
+$RECYCLE.BIN/
+*.cab
+*.lnk
+*.msi
+*.msm
+*.msp
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.DS_Store
+.DocumentRevisions-V100
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trash-*
+.Trashes
+.VolumeIcon.icns
+._*
+.apdisk
+.directory
+.fseventsd
+.idea
+CNAME
+Desktop.ini
+Network Trash Folder
+Temporary Items
+Thumbs.db
+ehthumbs.db
