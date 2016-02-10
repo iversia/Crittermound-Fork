@@ -391,7 +391,7 @@ var ticksPerSecond=20,game,GameController=function()
 		this.nations.push(new Nation(13,3,"mosquitoes","high health",7500,1e4,6,12,2));
 		this.nations.push(new Nation(14,3,"leeches","high health",1e5,125e3,9,13,3));
 		this.nations.push(new Nation(8,5,"centipedes","solo fighter",500,1e3,3,12,1));
-		this.nations.push(new Nation(7,5,"praying mantis","solo fighter",1e4,15e3,6,8,2));
+		this.nations.push(new Nation(7,5,"praying mantises","solo fighter",1e4,15e3,6,8,2));
 		this.nations.push(new Nation(6,5,"tarantulas","solo fighter",125e3,15e4,9,7,3));
 		this.nations()[0].isUnlocked(!0);
 		this.nation(this.nations()[0]);

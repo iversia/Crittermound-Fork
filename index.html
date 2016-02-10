@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <html>
-
 <head>
+    <meta charset="utf-8">
     <title>Critter Mound</title>
     <script src="Scripts/jquery-2.1.1.min.js"></script>
     <script src="Scripts/knockout-3.1.0.js"></script>
@@ -13,11 +14,9 @@
     <script src="Scripts/jquery.simplemodal.1.4.4.min.js"></script>
     <link href="Content/Site.css" rel="stylesheet" />
     <link href="Content/tipped.css" rel="stylesheet" />
-
-    <meta name="description" content="Casual Incrimental Broswer Game.  Breed Critters to Advance.">
-    <meta name="ROBOTS" content="INDEX, NOFOLLOW">
+    <meta name="description" content="Casual Incremental Browser Game.  Breed Critters to Advance.">
+    <meta name="robots" content="index, nofollow">
 </head>
-
 <body>
     <div id="pageContent">
         <div style="float: right; padding: 3px; font-weight: bold;">
@@ -28,19 +27,31 @@
             Critter Mound
         </div>
 
-        <div style="margin-top: 10px;"></div>
-        <ul class="tabs">
-            <li class="male"><a href="#tabs-hatchery" title="">Royal Hatchery (<span data-bind="text: femaleMound().length + maleMound().length"></span>/<span data-bind="text: maxFemaleMoundSize() + maxMaleMoundSize()"></span>)</a></li>
-            <li class="female" data-bind="visible: isHeirsUnlocked"><a href="#tabs-heirs" title="">Heir Hatchery (<span data-bind="text: princessMound().length + princeMound().length"></span>/<span data-bind="text: maxPrincessMoundSize() + maxPrinceMoundSize()"></span>)</a></li>
-            <li class="mine"><a href="#tabs-production" title="">Workers  (<span data-bind="text: '+' + gameFormatNumber(factorySodPerSecond())+ '/s'"></span>)</a></li>
-            <li class="army" data-bind="css: { battle: inBattle}"><a href="#tabs-barracks" title="">Soldiers (<span data-bind="text: armyMound().length"></span>/<span data-bind="text: maxArmyMoundSize()"></span>)</a></li>
-            <li class="achievement"><a href="#tabs-achievements" title="">Achievements (<span data-bind="text: achievementsUnlocked()"></span>/<span data-bind="text: achievements().length"></span>)</a></li>
-            <li><a href="#tabs-information" title="">How To Play</a></li>
-        </ul>
+        <header>
+            <aside id="progress">
+                <span data-bind="text: 'Generations: ' + gameFormatNumber(generations())"></span>
+                <span data-bind="text: 'Sod: ' + gameFormatNumber(sod())"></span>
+                <button data-bind="click: $root.Save.bind($root), clickBubble: false">save</button>
+                <button data-bind="text: 'boost: ' + boosts() + ' / ' + maxBoosts(), click: $root.Boost.bind($root, 'Mother'), clickBubble: false, disable: boosts() < 1">boost</button>
+            </aside>
+            <h1>Critter Mound</h1>
+        </header>
+
+        <nav>
+            <ul class="tabs">
+                <li class="male"><a href="#tabs-hatchery" title="">Royal Hatchery (<span data-bind="text: femaleMound().length + maleMound().length"></span>/<span data-bind="text: maxFemaleMoundSize() + maxMaleMoundSize()"></span>)</a></li>
+                <li class="female" data-bind="visible: isHeirsUnlocked"><a href="#tabs-heirs" title="">Heir Hatchery (<span data-bind="text: princessMound().length + princeMound().length"></span>/<span data-bind="text: maxPrincessMoundSize() + maxPrinceMoundSize()"></span>)</a></li>
+                <li class="mine"><a href="#tabs-production" title="">Workers (<span data-bind="text: '+' + gameFormatNumber(factorySodPerSecond())+ '/s'"></span>)</a></li>
+                <li class="army" data-bind="css: { battle: inBattle}"><a href="#tabs-barracks" title="">Soldiers (<span data-bind="text: armyMound().length"></span>/<span data-bind="text: maxArmyMoundSize()"></span>)</a></li>
+                <li class="achievement"><a href="#tabs-achievements" title="">Achievements (<span data-bind="text: achievementsUnlocked()"></span>/<span data-bind="text: achievements().length"></span>)</a></li>
+                <li><a href="#tabs-information" title="">How To Play</a></li>
+            </ul>
+        </nav>
 
         <div class="tabcontents">
-            <div id="tabs-hatchery" class="tab" style="display:none">
-                <table cellspacing="10">
+            <section id="tabs-hatchery" class="tab" style="display:none">
+                <h2>Royal Hatchery</h2>
+                <table>
                     <tr>
                         <td style="vertical-align: top; width: 50%">
                             <table class="critter female">
@@ -126,9 +137,10 @@
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div id="tabs-heirs" class="tab" style="display:none">
-                <table cellspacing="10">
+            </section>
+            <section id="tabs-heirs" class="tab" style="display:none">
+                <h2>Heir Hatchery</h2>
+                <table>
                     <tr>
                         <td style="vertical-align: top; width: 50%">
                             <table class="critter female">
@@ -218,9 +230,10 @@
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div id="tabs-production" class="tab" style="display:none">
-                <table cellspacing="10">
+            </section>
+            <section id="tabs-production" class="tab" style="display:none">
+                <h2>Workers</h2>
+                <table>
                     <tr>
                         <td colspan="2" style="vertical-align: top;">
                             <table class="production" style="width: 1050px; margin: 0 auto;">
@@ -346,9 +359,10 @@
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div id="tabs-barracks" class="tab" style="display:none">
-                <table cellspacing="10">
+            </section>
+            <section id="tabs-barracks" class="tab" style="display:none">
+                <h2>Soldiers</h2>
+                <table>
                     <tr data-bind="visible: atWar">
                         <td>
                             <div style="float: right">
@@ -391,40 +405,40 @@
                             </table>
                             <div style="margin-top: 10px; font-weight: bold;" data-bind="visible: atWar">
                                 <div data-bind="visible: armyMound().length > 0">
-                                    Each troop is recieving a <span class="higher">1% critical hit chance per level</span>.
+                                    Each troop is receiving a <span class="higher">1% critical hit chance per level</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().hasGeneral()">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().generalBonus() + '% hunting bonus'"></span> from your <span class="higher">General</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().generalBonus() + '% hunting bonus'"></span> from your <span class="higher">General</span>.
                                 </div>
                                 <div data-bind="visible: nation().isDefeated()">
-                                    Your troops are recieving a <span class="higher">100% hunting bonus</span> from <span class="higher">controlling the enemy mound</span>.
+                                    Your troops are receiving a <span class="higher">100% hunting bonus</span> from <span class="higher">controlling the enemy mound</span>.
                                 </div>
                                 <div data-bind="visible: nation().fortFound()">
-                                    Your troops are recieving a <span class="higher">50% hunting bonus</span> from <span class="higher">an abandoned fort</span>.
+                                    Your troops are receiving a <span class="higher">50% hunting bonus</span> from <span class="higher">an abandoned fort</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().hasScout()">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().scoutBonus() + '% exploration bonus' "></span> from your <span class="higher">Scout</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().scoutBonus() + '% exploration bonus' "></span> from your <span class="higher">Scout</span>.
                                 </div>
                                 <div data-bind="visible: nation().isDefeated()">
-                                    Your troops are recieving a <span class="higher">100% exploration bonus</span> from <span class="higher">controlling the enemy mound</span>.
+                                    Your troops are receiving a <span class="higher">100% exploration bonus</span> from <span class="higher">controlling the enemy mound</span>.
                                 </div>
                                 <div data-bind="visible: nation().exploreFound()">
-                                    Your troops are recieving a <span class="higher">50% exploration bonus</span> from <span class="higher">high ground</span>.
+                                    Your troops are receiving a <span class="higher">50% exploration bonus</span> from <span class="higher">high ground</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().hasMedic()">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().medicBonus() + '% healing bonus'"></span> from your <span class="higher">Medic</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().medicBonus() + '% healing bonus'"></span> from your <span class="higher">Medic</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().strengthBonus() > 0">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().strengthBonus() + '% strength bonus'"></span> during battle from <span class="higher">artifacts</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().strengthBonus() + '% strength bonus'"></span> during battle from <span class="higher">artifacts</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().agilityBonus() > 0">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().agilityBonus() + '% agility bonus'"></span> during battle from <span class="higher">artifacts</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().agilityBonus() + '% agility bonus'"></span> during battle from <span class="higher">artifacts</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().biteBonus() > 0">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().biteBonus() + '% bite bonus'"></span> during battle from <span class="higher">artifacts</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().biteBonus() + '% bite bonus'"></span> during battle from <span class="higher">artifacts</span>.
                                 </div>
                                 <div data-bind="visible: armyUpgrades().stingBonus() > 0">
-                                    Your troops are recieving a <span class="higher" data-bind="text: armyUpgrades().stingBonus() + '% sting bonus'"></span> during battle from <span class="higher">artifacts</span>.
+                                    Your troops are receiving a <span class="higher" data-bind="text: armyUpgrades().stingBonus() + '% sting bonus'"></span> during battle from <span class="higher">artifacts</span>.
                                 </div>
                             </div>
                             <div style="margin-top: 10px; font-weight: bold;" data-bind="visible: !inBattle() && map().enemyArmyMound().length > 0">
@@ -510,19 +524,19 @@
                                 </div>
                             </div>
                             <div data-bind="visible: !inBattle() && showTreasure()" style="margin-top: 50px; padding: 20px; text-align: center!important; display: block;">
-                                <h1 data-bind="text: treasureTitle"></h1>
-                                <h3 data-bind="text: treasureText"></h3>
+                                <h3 data-bind="text: treasureTitle"></h3>
+                                <h4 data-bind="text: treasureText"></h4>
                                 <button class="war unlocked" style="margin-top: 20px;" data-bind="click: $root.AcknowledgeTreasure.bind($root)">back to war</button>
                             </div>
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div id="tabs-achievements" class="tab" style="display:none">
-                <table cellspacing="10">
+            </section>
+            <section id="tabs-achievements" class="tab" style="display:none">
+                <h2>Achievements</h2>
+                <table>
                     <tr>
                         <td style="width: 50%; padding: 5px; vertical-align: top;text-align: center;">
-                            <h4>Achievements</h4>
                             <div data-bind="foreach: achievements">
                                 <div class="achievement" data-bind="css: { unlocked: isUnlocked}">
                                     <div class="name" data-bind="text: name"></div>
@@ -532,19 +546,18 @@
                         </td>
                     </tr>
                 </table>
-            </div>
-            <div id="tabs-information" class="tab" style="display:none">
-                <table cellspacing="10">
+            </section>
+            <section id="tabs-information" class="tab" style="display:none">
+                <h2>How To Play</h2>
+                <table>
                     <tr>
                         <td style="width: 50%; padding: 5px; vertical-align: top;">
-                            <h4>How To Play</h4>
-
                             <p>
                                 <strong>Questions & Discussion at <a href="http://www.reddit.com/r/crittermound">www.reddit.com/r/crittermound</a></strong><br />
                             </p>
                             <p>
                                 <strong>General</strong><br />
-                                Breed new critters, breed stronger critters, destroy your enimies.
+                                Breed new critters, breed stronger critters, destroy your enemies.
                             </p>
 
                             <p>
@@ -553,36 +566,36 @@
                                     <li>Wait for new critters in the hatchery</li>
                                     <li>If they are mostly green, use them as King and Queen</li>
                                     <li>Put red critters to work as a workers</li>
-                                    <li>Put 1 critter to work as a soilder</li>
+                                    <li>Put one critter to work as a soldier</li>
                                     <li>Start a war</li>
-                                    <li>Repeat 1 and 2 until you are strong enough to win the war</li>
+                                    <li>Repeat steps 1 and 2 until you are strong enough for <s>garden</s> galactic domination</li>
                                 </ol>
                             </p>
 
                             <p>
                                 <strong>Hatchery</strong><br />
-                                The hatcheries are where the King and Queen produce new offspring.  Any egg in the hatchery can become anything, the new King, a Mine Worker, or Military.
+                                The hatcheries are where the King and Queen produce new offspring.  Any egg in the hatchery can become anything, the new King, a Mine Worker, or Soldier.
                                 Once assigned a job it can not be changed.  You can tell a building how to prioritize with the dropdown.  It won't change what is produced, just who is kicked out
                                 when there isn't enough space (the eggs are just tossed out of the mound).  Boost causes an instant mating, and recharges over time.
                             </p>
 
                             <p>
                                 <strong>Traits and Mutations</strong><br />
-                                The traits vary during each breeding, and are used in various calculations.  In general, a trait varies within it's parents range.  If the mother is 10 and the
+                                The traits vary during each breeding, and are used in various calculations.  In general, a trait varies within its parents range.  If the mother is 10 and the
                                 father is 15, then the offspring will be between 9 and 16.  The variance increases as the trait increases.  Randomly, some critters will mutate as they are improved.  Mutation can increase a
                                 traits value with a bonus.  Mutations breed the same as traits.  You can also find new mutations by going to war.
                             </p>
                             <p>
                                 <strong>Vitality</strong><br />
-                                Vitality controls health, and how well a critter produces sod in the factory
+                                Vitality controls health, and how well a critter produces sod in the factory.
                             </p>
                             <p>
                                 <strong>Strength</strong><br />
-                                Strength gives 50% of it's value as a bonus to bite during battle, and as a worker, controls how much a critter can carry.
+                                Strength gives 50% of its value as a bonus to bite during battle, and as a worker, controls how much a critter can carry.
                             </p>
                             <p>
                                 <strong>Agility</strong><br />
-                                Agility controls how fast a critter breeds, works, and fighting order.  It also provides 50% of it's value as a bonus to string during battle.
+                                Agility controls how fast a critter breeds, works, and fighting order.  It also provides 50% of its value as a bonus to sting during battle.
                             </p>
                             <p>
                                 <strong>Bite</strong><br />
@@ -594,8 +607,8 @@
                             </p>
                             <p>
                                 <strong>Bite vs Sting</strong><br />
-                                These two traits are opposed to eachother.   They are both an attack and they are both a defense.  When each critter attacks it will choose one or the other at random,
-                                and it's opponet will counter the opposite.  Bite attacks Sting, Sting defends Bite, ect.
+                                These two traits are opposed to each other.   They are both an attack and they are both a defense.  When each critter attacks it will choose one or the other at random,
+                                and its opponent will counter the opposite.  Bite attacks Sting; Sting defends Bite.
                             </p>
                             <p>
                                 <strong>Stats</strong><br />
@@ -626,19 +639,19 @@
                             </p>
 
                             <p>
-                                <strong>Barracks</strong><br />
-                                The barracks hosts your army.  When you are at war, they defend your mound, and search the surrounding area for enemies to gain territory.  You can leave a war at anytime,
-                                but your map will be lost.  Because the ancient map makers... its just too much data to store, alright.   So ending a war means you'll have to start over if you revisit.
+                                <strong>Soldiers</strong><br />
+                                This is where your army is found.  When you are at war, they defend your mound, and scout the surrounding area for enemies to gain territory.  You may leave a war at anytime,
+                                but your map progression will be lost.
                             </p>
                             <p>
                                 <strong>Soldier Ranks</strong><br />
                                 The three highest ranked soldiers are special.  They become your General, your Scout, and your Medic in that order.  If one is killed, or a higher ranking officer, they adjust to new rolls.
-                                Soldiers below this still can XP and will be promoted if needed.  All soldiers get a critical change bonus equal to their level (Level 10 = 10% chance).
+                                Soldiers below this still earn XP and will be promoted if needed.  All soldiers get a critical chance bonus equal to their level (Level 10 = 10% chance).
                             </p>
 
                             <p data-bind="visible: isHeirsUnlocked">
                                 <strong>Heir Hatchery</strong><br />
-                                You have become so rich, that you can now help a new mound get off it's feet.  However, they don't yet have their own home.  They'll need sod to create offspring.  (Sod = Score)
+                                You have become so rich, that you can now help a new mound get off its feet.  However, they don't yet have their own home.  They'll need sod to create offspring.  (Sod = Score)
                                 You can use the <strong>shift key</strong> to cross promote between the royals and their heirs.
                             </p>
 
@@ -647,7 +660,6 @@
                         <td style="width: 50%; padding: 5px; vertical-align: top;">
                             <button onclick="Reset()">reset game / delete save</button>
                             <br /><br />
-                            <button data-bind="click: $root.Save.bind($root), clickBubble: false">save game</button> |
                             <button onclick="Export()">export game</button>
                             <button onclick="ShowImport()">import game</button>
                             <br /><br />
@@ -656,6 +668,12 @@
                             <br /><br />
                             <h4>Release Notes</h4>
                             <p>
+                                <strong>1.1.5 - Feb 10th, 2016</strong><br>
+                                <ul>
+                                    <li>Increased max mound size to 10</li>
+                                    <li>Fixed some spelling and grammatical errors</li>
+                                    <li>Updated HTML to fall into the HTML5 spec</li>
+                                </ul>
                                 <strong>1.1.4 - Sep 9th, 2014</strong><br />
                                 <ul>
                                     <li>Fixed Heir Mound cost</li>
@@ -718,10 +736,12 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </section>
         </div>
 
-        <h4 style="margin-top: 25px; text-align: center!important">Press <img src="Content/icons/shiftkey.gif" style="vertical-align: text-bottom" title="Shift Key" /> to see more options</h4>
+        <footer>
+            <p>Hold <img src="Content/icons/shiftkey.gif" title="Shift Key" alt="Shift Key"> to toggle more options</p>
+        </footer>
 
     </div>
 
@@ -1078,7 +1098,6 @@
         <h4>Import Game</h4>
         <textarea id="txtImport" rows="10" cols="75"></textarea>
     </div>
-    <!--<script src="Scripts/game.scramble.js"></script>-->
     <script src="Scripts/Game.js"></script>
     <script src="Scripts/Site.js"></script>
 </body>
