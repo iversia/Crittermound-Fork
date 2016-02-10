@@ -20,9 +20,23 @@ tbody:empty {
   min-width : 1275px;
 }
 
-.title {
+header #progress {
+  float: right;
+  padding: 3px;
+  font-weight: bold;
+}
+
+header h1 {
   font-size   : 18px;
   font-weight : bold;
+}
+
+h2 {
+  margin-left: 15px;
+}
+
+footer p {
+  text-align: center;
 }
 
 .dim {
